@@ -5,6 +5,7 @@ var bodyParse = require('body-parser')
 var nunjucks = require('nunjucks')
 var routes = require('./routes')
 var path = require('path')
+var models = require('./models')
 
 
 app.use(morgan('dev'))
@@ -20,4 +21,6 @@ app.engine('html', nunjucks.render)
 var port = 1337
 app.listen(port, function() {
 	console.log("Listening on port ", port);
+	models.Page.sync()
+	modles.User.sync()
 })
