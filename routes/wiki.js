@@ -21,7 +21,23 @@ router.get('/', function(req, res, next){
   //does something...
   // res.send()
   // next()
-  res.redirect('/')
+  var page = models.Page
+  var extension = req.params.urlTitle
+  page.findAll({})
+  .then(function(tables){
+    //var row = table[0].dataValues
+    var pages = tables.map(function(instance){
+      return instance.dataValues;
+    })
+    // console.log('tables')
+    // console.log(tables)
+    //var pages = tables[0]
+    // console.log('pages')
+    // console.log(pages)
+    res.render('index', {pages: pages})
+  })
+  .catch(next)
+  //res.redirect('/')
 })
 
 router.post('/', function(req, res, next){
@@ -68,14 +84,3 @@ router.get('/:urlTitle', function(req, res, next) {
   })
   .catch(next)
 })
-
-
-
-
-
-
-
-
-
-
-
