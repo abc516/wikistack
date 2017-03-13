@@ -39,26 +39,69 @@ router.get('/', function(req, res, next){
   .catch(next)
   //res.redirect('/')
 })
-
+//
 router.post('/', function(req, res, next){
   //does something...
   //res.send()
-  console.log("I HAVE HIT POST ROUTER")
-  console.log(req.body)
+  //console.log("I HAVE HIT POST ROUTER")
+  //console.log(req.body)
  var urlTitle = GenerateUrlTitle(req.body.title)
- console.log(req.protocol + '://' + req.get('host') + urlTitle)
- console.log(req.protocol + '://' + req.get('host') + req.baseUrl + '/'+ urlTitle)
+ //console.log(req.protocol + '://' + req.get('host') + urlTitle)
+ //console.log(req.protocol + '://' + req.get('host') + req.baseUrl + '/'+ urlTitle)
+  var author = req.body['author-name']
+  var authorEmail = req.body['author-email']
 
-  var page = models.Page.build({
-    title: req.body.title,
-    urlTitle: req.protocol + '://' + req.get('host') + req.baseUrl + '/'+ urlTitle,
-    content: req.body['page-content'],
-    status: "open"
-    //date:
-  });
+  var page = models.Page
 
-  page.save()
-  res.redirect('/wiki/'+urlTitle)
+  console.log(author)
+  console.log(authorEmail)
+  models.User.findOrCreate({where : {name: author, email: authorEmail}})
+  .then(function(user, created){
+      console.log('user')
+      console.log(user)
+      var ourUser = user[0]
+      // console.log('userValues')
+      // console.log(user.values)
+      var row = page.build({
+        title: req.body.title,
+        urlTitle: req.protocol + '://' + req.get('host') + req.baseUrl + '/'+ urlTitle,
+        content: req.body['page-content'],
+        status: "open"
+        //date:
+      });
+
+      row.save().then(function(ourPage){
+        return ourPage.setAuthor(ourUser)
+      })
+  })
+  // .then(function(row){
+  //   row.save()
+  //   //res.redirect('/wiki/'+urlTitle)
+  // })
+  .then(function(){
+    res.redirect('/wiki/'+urlTitle)
+  })
+
+  // .success(function(user, created){
+  //   console.log('user')
+  //   console.log(user)
+  //   console.log('userValues')
+  //   console.log(user.values)
+  // })
+  // .catch(function(error){
+  //   console.log('error detect: ', error)
+  // })
+  //console.log(user)
+  // var page = models.Page.build({
+  //   title: req.body.title,
+  //   urlTitle: req.protocol + '://' + req.get('host') + req.baseUrl + '/'+ urlTitle,
+  //   content: req.body['page-content'],
+  //   status: "open"
+  //   //date:
+  // });
+
+  // page.save()
+  // res.redirect('/wiki/'+urlTitle)
   //res.json(req.body)
   //res.redirect('/wiki')
   //next()
