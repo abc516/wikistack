@@ -6,11 +6,11 @@ var db = new Sequelize('postgres://localhost:5432/wikistack');
 
 var Page = db.define('page', {
     title: {
-        type: Sequelize.STRING, 
+        type: Sequelize.STRING,
         allowNull: false,
     },
     urlTitle: {
-        type: Sequelize.STRING, , allowNull: false, validate: {isUrl: true}
+        type: Sequelize.STRING,  allowNull: false, validate: {isUrl: true}
     },
     content: {
         type: Sequelize.TEXT, allowNull: false
@@ -20,11 +20,15 @@ var Page = db.define('page', {
     },
     date: {
         type: Sequelize.DATE, defaultValue: Sequelize.Now
-    },
-    getterMethods: {
-        route: function () {return '/wiki/' + this.urlTitle}
+    }},{
+      getterMethods: {
+          route: function () {return  this.urlTitle}
+      }
     }
-});
+    // getterMethods: {
+    //     route: function () {return '/wiki/' + this.urlTitle}
+    // }
+);
 
 var User = db.define('user', {
     name: {
