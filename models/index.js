@@ -22,7 +22,10 @@ var Page = db.define('page', {
         type: Sequelize.DATE, defaultValue: Sequelize.Now
     }},{
       getterMethods: {
-          route: function () {return  this.urlTitle}
+          route: function () {
+            var urlArr = this.urlTitle.split("/")
+            return  /wiki/ + urlArr[urlArr.length-1]
+        }
       }
     }
     // getterMethods: {

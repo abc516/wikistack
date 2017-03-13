@@ -42,7 +42,7 @@ router.post('/', function(req, res, next){
   });
 
   page.save()
-  res.json(page.toJSON())
+  res.redirect('/wiki/'+urlTitle)
   //res.json(req.body)
   //res.redirect('/wiki')
   //next()
@@ -52,5 +52,30 @@ router.get('/add', function(req, res, next){
   //does something...
   //res.send()
   res.render('addpage')
-  next()
 })
+
+router.get('/:urlTitle', function(req, res, next) {
+  var page = models.Page
+  var extension = req.params.urlTitle
+  page.findAll({
+    where: {
+      urlTitle: req.protocol + '://' + req.get('host') + req.baseUrl + '/'+ extension
+    }
+  })
+  .then(function(table){
+    var row = table[0].dataValues
+    res.render('wikipage', {row: row})
+  })
+  .catch(next)
+})
+
+
+
+
+
+
+
+
+
+
+
