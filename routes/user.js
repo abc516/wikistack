@@ -20,6 +20,7 @@ router.get('/', function(req, res, next){
 })
 
 router.get('/:id', function(req, res, next){
+  var user = models.User
   var userId = Number (req.params.id)
   var page = models.Page
   user.findAll({
@@ -28,7 +29,7 @@ router.get('/:id', function(req, res, next){
     }
   })
   .then(function(tables){
-    //var row = table[0].dataValues
+    var user = tables[0].dataValues
     page.findAll({
       where: {
         authorId: userId
@@ -38,7 +39,7 @@ router.get('/:id', function(req, res, next){
       var pagesData = pages.map(function(instance){
         return instance.dataValues;
       })
-      res.render('users', {users: users})
+      res.render('user', {user: user, pages: pagesData})
     })
 
   })
