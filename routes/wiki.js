@@ -116,10 +116,16 @@ router.get('/add', function(req, res, next){
 router.get('/:urlTitle', function(req, res, next) {
   var page = models.Page
   var extension = req.params.urlTitle
+  var user = models.User
   page.findAll({
     where: {
       urlTitle: req.protocol + '://' + req.get('host') + req.baseUrl + '/'+ extension
-    }
+    },
+    //new stuff
+    include: [
+        {model: user, as: 'author'}
+    ]
+
   })
   .then(function(table){
     var row = table[0].dataValues

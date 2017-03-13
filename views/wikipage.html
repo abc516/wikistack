@@ -3,7 +3,8 @@
 {% block content %}
 
   <h3>{{row.title}}<small> (<a href="{{row.urlTitle}}">Similar</a>)</small></h3>
-  <h4>by <a href="PLACEHOLDER-AUTHOR-URL">PLACEHOLDER AUTHOR NAME</a></h4>
+  <!-- <h4>by <a href="PLACEHOLDER-AUTHOR-URL">PLACEHOLDER AUTHOR NAME</a></h4> -->
+  <h4>by <a href="/users/{{row.authorId}}">{{row.author.name}}</a></h4>
   <div>PLACEHOLDER TAG LIST</div>
   <hr/>
   <div>PLACEHOLDER AUTHOR NAME WITH LINK TO AUTHOR PAGE</div>
